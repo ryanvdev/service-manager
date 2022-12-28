@@ -2,11 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var ServiceManager;
 (function (ServiceManager) {
-    ;
+    const getStrCurrentTime = (timeZone) => {
+        return new Date().toLocaleTimeString('vi-VN', {
+            timeZone,
+            hour12: false,
+            hour: '2-digit',
+            second: '2-digit',
+            minute: '2-digit',
+        });
+    };
     ServiceManager.createIntervalService = (cb, t) => {
         const storage = {
             duration: t,
-            timerId: undefined
+            timerId: undefined,
         };
         const result = {
             start: async () => {
@@ -14,7 +22,6 @@ var ServiceManager;
                     console.log('Service was being ran !');
                     return false;
                 }
-                ;
                 storage.timerId = setInterval(() => {
                     cb();
                 }, storage.duration);
@@ -34,14 +41,14 @@ var ServiceManager;
                     return 'stopped';
                 }
                 return 'running';
-            }
+            },
         };
         return Object.freeze(result);
     };
-    ServiceManager.createTimeService = (cb, t, locales = 'VN') => {
+    ServiceManager.createTimeService = (cb, t, timeZone = 'Asia/Ho_Chi_Minh') => {
         const storage = {
             durations: Object.freeze([...t]),
-            timerId: undefined
+            timerId: undefined,
         };
         const result = {
             start: async () => {
@@ -49,18 +56,11 @@ var ServiceManager;
                     console.log('Service was being ran !');
                     return false;
                 }
-                ;
                 storage.timerId = setInterval(() => {
-                    const currentStrTime = (new Date()).toLocaleTimeString(locales, {
-                        hour12: false,
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                    });
-                    // 12:01:01
-                    if (storage.durations.includes(currentStrTime)) {
-                        cb();
+                    if (!storage.durations.includes(getStrCurrentTime(timeZone))) {
+                        return;
                     }
+                    cb();
                 }, 1000);
                 return true;
             },
@@ -78,7 +78,7 @@ var ServiceManager;
                     return 'stopped';
                 }
                 return 'running';
-            }
+            },
         };
         return Object.freeze(result);
     };

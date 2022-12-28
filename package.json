@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/main.ts",
-    "dev:test": "nodemon src/test.ts",
-    "dev:py": "nodemon --exec python ./src/main.py",
-    "dev:node": "nodemon src/main.ts",
-    "dev:bat": "nodemon --exec .\\src\\main.bat a",
+    "start": "node ./src/main.js",
+    "dev": "nodemon ./src/main.ts",
+    "prettier:fix": "prettier -w src/**/*.{ts,tsx,scss,css,json}",
+    "prettier:check": "prettier -c src/**/*.{ts,tsx,scss,css,json}",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
